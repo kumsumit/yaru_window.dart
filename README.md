@@ -1,1 +1,0 @@
-packages/yaru_window/README.md
