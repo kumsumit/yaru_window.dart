@@ -6,11 +6,12 @@ environment:
   flutter: ">=3.32.0"
 
 dependencies:
-  flex_color_picker: ^3.7.1
+  flex_color_picker: ^4.0.0
   flutter:
     sdk: flutter
   handy_window: ^0.4.0
-  yaru: ^8.1.0
+  material_ui: ^1.11.1
+  yaru: ^12.0.0
   yaru_window:
     path: ../
 
@@ -19,7 +20,7 @@ dev_dependencies:
     sdk: flutter
   integration_test:
     sdk: flutter
-  ubuntu_lints: ^0.4.1+1
+  ubuntu_lints: ^0.4.2
 
 dependency_overrides:
   yaru_window:

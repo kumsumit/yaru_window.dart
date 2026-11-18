@@ -1,6 +1,10 @@
 import 'package:flex_color_picker/flex_color_picker.dart';
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:yaru/yaru.dart';
+
+/// The theme mode of the example app. The brightness buttons set it together
+/// with the native window brightness so that both follow each other.
+final themeMode = ValueNotifier<ThemeMode>(ThemeMode.system);
 
 Future<void> main() async {
   await YaruWindow.ensureInitialized();
@@ -8,13 +12,30 @@ Future<void> main() async {
   runApp(
     YaruTheme(
       builder: (context, yaru, child) {
-        return MaterialApp(
-          theme: yaru.theme,
-          darkTheme: yaru.darkTheme,
-          debugShowCheckedModeBanner: false,
-          home: const HomePage(),
+        return ValueListenableBuilder<ThemeMode>(
+          valueListenable: themeMode,
+          builder: (context, mode, _) => MaterialApp(
+            theme: _withButtons(yaru.theme, const Color(0xFF0B6BCB)),
+            darkTheme: _withButtons(yaru.darkTheme, const Color(0xFFE95420)),
+            themeMode: mode,
+            debugShowCheckedModeBanner: false,
+            home: const HomePage(),
+          ),
         );
       },
+    ),
+  );
+}
+
+/// Gives the example's elevated buttons a colour of their own per theme, so
+/// that they visibly change together with the brightness.
+ThemeData _withButtons(ThemeData theme, Color color) {
+  return theme.copyWith(
+    elevatedButtonTheme: ElevatedButtonThemeData(
+      style: ElevatedButton.styleFrom(
+        backgroundColor: color,
+        foregroundColor: Colors.white,
+      ),
     ),
   );
 }
@@ -94,12 +115,22 @@ class StateView extends StatelessWidget {
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   ElevatedButton(
-                    onPressed: () => window.setBrightness(Brightness.light),
+                    onPressed: () {
+                      themeMode.value = ThemeMode.light;
+                      window
+                        ..setBrightness(Brightness.light)
+                        ..setBackground(const Color(0xFFFFFFFF));
+                    },
                     child: const Text('Light'),
                   ),
                   const SizedBox(width: 10),
                   ElevatedButton(
-                    onPressed: () => window.setBrightness(Brightness.dark),
+                    onPressed: () {
+                      themeMode.value = ThemeMode.dark;
+                      window
+                        ..setBrightness(Brightness.dark)
+                        ..setBackground(const Color(0xFF1F1F1F));
+                    },
                     child: const Text('Dark'),
                   ),
                 ],
@@ -203,6 +234,51 @@ class StateView extends StatelessWidget {
                       );
                     },
                     child: const Text('Edit'),
+                  ),
+                ],
+              ),
+            ),
+            ListTile(
+              title: const Text('Window controls'),
+              subtitle: Wrap(
+                spacing: 10,
+                children: [
+                  ElevatedButton(
+                    onPressed: window.center,
+                    child: const Text('Center'),
+                  ),
+                  ElevatedButton(
+                    onPressed: () => window.setSize(const Size(900, 600)),
+                    child: const Text('900x600'),
+                  ),
+                  ElevatedButton(
+                    onPressed: () =>
+                        window.setMinimumSize(const Size(500, 400)),
+                    child: const Text('Min 500x400'),
+                  ),
+                  ElevatedButton(
+                    onPressed: () => window.setResizable(false),
+                    child: const Text('Fixed'),
+                  ),
+                  ElevatedButton(
+                    onPressed: () => window.setResizable(true),
+                    child: const Text('Resizable'),
+                  ),
+                  ElevatedButton(
+                    onPressed: () => window.setAlwaysOnTop(true),
+                    child: const Text('On top'),
+                  ),
+                  ElevatedButton(
+                    onPressed: () => window.setAlwaysOnTop(false),
+                    child: const Text('Not on top'),
+                  ),
+                  ElevatedButton(
+                    onPressed: () => window.setControlButtonsVisible(false),
+                    child: const Text('Hide buttons'),
+                  ),
+                  ElevatedButton(
+                    onPressed: () => window.setControlButtonsVisible(true),
+                    child: const Text('Show buttons'),
                   ),
                 ],
               ),

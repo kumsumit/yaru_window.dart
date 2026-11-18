@@ -38,6 +38,11 @@ static void my_application_activate(GApplication* application) {
       project, self->dart_entrypoint_arguments);
 
   FlView* view = fl_view_new(project);
+  // The example draws a transparent Flutter scaffold over the native window
+  // background (set with YaruWindow.setBackground), so the view must not paint
+  // its own opaque background.
+  GdkRGBA background = {0.0, 0.0, 0.0, 0.0};
+  fl_view_set_background_color(view, &background);
   gtk_box_pack_end(GTK_BOX(box), GTK_WIDGET(view), true, true, 0);
 
   fl_register_plugins(FL_PLUGIN_REGISTRY(view));

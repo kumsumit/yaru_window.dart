@@ -109,6 +109,54 @@ class YaruWindow {
     return YaruWindow.of(context).setClosable(closable);
   }
 
+  /// Sets whether the native window control buttons are visible.
+  static Future<void> setControlButtonsVisible(
+    BuildContext context,
+    bool visible,
+  ) {
+    return YaruWindow.of(context).setControlButtonsVisible(visible);
+  }
+
+  /// Sets whether the window can be resized.
+  static Future<void> setResizable(BuildContext context, bool resizable) {
+    return YaruWindow.of(context).setResizable(resizable);
+  }
+
+  /// Sets the minimum size of the window.
+  static Future<void> setMinimumSize(BuildContext context, Size size) {
+    return YaruWindow.of(context).setMinimumSize(size);
+  }
+
+  /// Sets the maximum size of the window.
+  static Future<void> setMaximumSize(BuildContext context, Size size) {
+    return YaruWindow.of(context).setMaximumSize(size);
+  }
+
+  /// Sets the size of the window.
+  static Future<void> setSize(BuildContext context, Size size) {
+    return YaruWindow.of(context).setSize(size);
+  }
+
+  /// Sets the position of the window.
+  static Future<void> setPosition(BuildContext context, Offset position) {
+    return YaruWindow.of(context).setPosition(position);
+  }
+
+  /// Sets whether the window stays above other windows.
+  static Future<void> setAlwaysOnTop(BuildContext context, bool alwaysOnTop) {
+    return YaruWindow.of(context).setAlwaysOnTop(alwaysOnTop);
+  }
+
+  /// Sets whether the window is hidden from the taskbar.
+  static Future<void> setSkipTaskbar(BuildContext context, bool skip) {
+    return YaruWindow.of(context).setSkipTaskbar(skip);
+  }
+
+  /// Centers the window on its screen.
+  static Future<void> center(BuildContext context) {
+    return YaruWindow.of(context).center();
+  }
+
   /// Returns the current state of the window.
   static Future<YaruWindowState> state(BuildContext context) {
     return YaruWindow.of(context).state();
@@ -140,7 +188,7 @@ class YaruWindow {
 class YaruWindowInstance {
   YaruWindowInstance._(this._id);
 
-  final int _id; // ignore: unused_field
+  final int _id;
 
   YaruWindowPlatform get _platform => YaruWindowPlatform.instance;
 
@@ -207,6 +255,37 @@ class YaruWindowInstance {
   Future<void> setClosable(bool closable) {
     return _platform.setClosable(_id, closable);
   }
+
+  /// Sets whether the native window control buttons are visible.
+  Future<void> setControlButtonsVisible(bool visible) =>
+      _platform.setControlButtonsVisible(_id, visible);
+
+  /// Sets whether the window can be resized.
+  Future<void> setResizable(bool resizable) =>
+      _platform.setResizable(_id, resizable);
+
+  /// Sets the minimum size of the window.
+  Future<void> setMinimumSize(Size size) => _platform.setMinimumSize(_id, size);
+
+  /// Sets the maximum size of the window.
+  Future<void> setMaximumSize(Size size) => _platform.setMaximumSize(_id, size);
+
+  /// Sets the size of the window.
+  Future<void> setSize(Size size) => _platform.setSize(_id, size);
+
+  /// Sets the position of the window.
+  Future<void> setPosition(Offset position) =>
+      _platform.setPosition(_id, position);
+
+  /// Sets whether the window stays above other windows.
+  Future<void> setAlwaysOnTop(bool alwaysOnTop) =>
+      _platform.setAlwaysOnTop(_id, alwaysOnTop);
+
+  /// Sets whether the window is hidden from the taskbar.
+  Future<void> setSkipTaskbar(bool skip) => _platform.setSkipTaskbar(_id, skip);
+
+  /// Centers the window on its screen.
+  Future<void> center() => _platform.center(_id);
 
   /// Returns the current state of the window.
   Future<YaruWindowState> state() => _platform.state(_id);
