@@ -9,6 +9,8 @@ void main() {
   setUpAll(() {
     registerFallbackValue(Colors.red);
     registerFallbackValue(Brightness.light);
+    registerFallbackValue(Size.zero);
+    registerFallbackValue(Offset.zero);
   });
 
   testWidgets('platform', (tester) async {
@@ -44,6 +46,16 @@ void main() {
     when(() => platform.setMinimizable(any(), any())).thenAnswer((_) async {});
     when(() => platform.setMaximizable(any(), any())).thenAnswer((_) async {});
     when(() => platform.setClosable(any(), any())).thenAnswer((_) async {});
+    when(() => platform.setControlButtonsVisible(any(), any()))
+        .thenAnswer((_) async {});
+    when(() => platform.setResizable(any(), any())).thenAnswer((_) async {});
+    when(() => platform.setMinimumSize(any(), any())).thenAnswer((_) async {});
+    when(() => platform.setMaximumSize(any(), any())).thenAnswer((_) async {});
+    when(() => platform.setSize(any(), any())).thenAnswer((_) async {});
+    when(() => platform.setPosition(any(), any())).thenAnswer((_) async {});
+    when(() => platform.setAlwaysOnTop(any(), any())).thenAnswer((_) async {});
+    when(() => platform.setSkipTaskbar(any(), any())).thenAnswer((_) async {});
+    when(() => platform.center(any())).thenAnswer((_) async {});
     when(() => platform.state(any())).thenAnswer((_) async => state);
     when(() => platform.states(any())).thenAnswer((_) => Stream.value(change));
     when(() => platform.onClose(any(), any())).thenAnswer((_) async {});
@@ -108,6 +120,40 @@ void main() {
 
     await YaruWindow.setClosable(context, false);
     verify(() => platform.setClosable(0, false)).called(1);
+
+    await YaruWindow.setControlButtonsVisible(context, false);
+    verify(() => platform.setControlButtonsVisible(0, false)).called(1);
+
+    await YaruWindow.setResizable(context, false);
+    verify(() => platform.setResizable(0, false)).called(1);
+
+    await YaruWindow.setMinimumSize(context, const Size(100, 200));
+    verify(() => platform.setMinimumSize(0, const Size(100, 200))).called(1);
+
+    await YaruWindow.setMaximumSize(context, const Size(800, 600));
+    verify(() => platform.setMaximumSize(0, const Size(800, 600))).called(1);
+
+    await YaruWindow.setSize(context, const Size(400, 300));
+    verify(() => platform.setSize(0, const Size(400, 300))).called(1);
+
+    await YaruWindow.setPosition(context, const Offset(10, 20));
+    verify(() => platform.setPosition(0, const Offset(10, 20))).called(1);
+
+    await YaruWindow.center(context);
+    verify(() => platform.center(0)).called(1);
+
+    await YaruWindow.setAlwaysOnTop(context, true);
+    verify(() => platform.setAlwaysOnTop(0, true)).called(1);
+
+    await YaruWindow.setSkipTaskbar(context, true);
+    verify(() => platform.setSkipTaskbar(0, true)).called(1);
+
+    // The same calls through a window instance.
+    final window = YaruWindow.of(context);
+    await window.setResizable(true);
+    verify(() => platform.setResizable(0, true)).called(1);
+    await window.center();
+    verify(() => platform.center(0)).called(1);
 
     expect(await YaruWindow.state(context), state);
     verify(() => platform.state(0)).called(1);
